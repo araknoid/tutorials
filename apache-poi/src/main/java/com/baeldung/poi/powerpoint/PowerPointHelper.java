@@ -40,88 +40,90 @@ public class PowerPointHelper {
      */
     public void createPresentation(String fileLocation) throws IOException {
         // Create presentation
-        XMLSlideShow ppt = new XMLSlideShow();
+        try (XMLSlideShow ppt = new XMLSlideShow()) {
 
-        XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
+            XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 
-        // Retriving the slide layout
-        XSLFSlideLayout layout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
+            // Retrieving the slide layout
+            XSLFSlideLayout layout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
 
-        // Creating the 1st slide
-        XSLFSlide slide1 = ppt.createSlide(layout);
-        XSLFTextShape title = slide1.getPlaceholder(0);
-        // Clearing text to remove the predefined one in the template
-        title.clearText();
-        XSLFTextParagraph p = title.addNewTextParagraph();
+            // Creating the 1st slide
+            XSLFSlide slide1 = ppt.createSlide(layout);
+            XSLFTextShape title = slide1.getPlaceholder(0);
+            // Clearing text to remove the predefined one in the template
+            title.clearText();
+            XSLFTextParagraph p = title.addNewTextParagraph();
 
-        XSLFTextRun r1 = p.addNewTextRun();
-        r1.setText("Baeldung");
-        r1.setFontColor(new Color(78, 147, 89));
-        r1.setFontSize(48.);
+            XSLFTextRun r1 = p.addNewTextRun();
+            r1.setText("Baeldung");
+            r1.setFontColor(new Color(78, 147, 89));
+            r1.setFontSize(48.);
 
-        // Add Image
-        ClassLoader classLoader = getClass().getClassLoader();
-        byte[] pictureData = IOUtils.toByteArray(new FileInputStream(classLoader.getResource("logo-leaf.png").getFile()));
+            // Add Image
+            ClassLoader classLoader = getClass().getClassLoader();
+            byte[] pictureData = IOUtils.toByteArray(new FileInputStream(classLoader.getResource("logo-leaf.png").getFile()));
 
-        XSLFPictureData pd = ppt.addPicture(pictureData, PictureData.PictureType.PNG);
-        XSLFPictureShape picture = slide1.createPicture(pd);
-        picture.setAnchor(new Rectangle(320, 230, 100, 92));
+            XSLFPictureData pd = ppt.addPicture(pictureData, PictureData.PictureType.PNG);
+            XSLFPictureShape picture = slide1.createPicture(pd);
+            picture.setAnchor(new Rectangle(320, 230, 100, 92));
 
-        // Creating 2nd slide
-        layout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
-        XSLFSlide slide2 = ppt.createSlide(layout);
+            // Creating 2nd slide
+            layout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
+            XSLFSlide slide2 = ppt.createSlide(layout);
 
-        // setting the tile
-        title = slide2.getPlaceholder(0);
-        title.clearText();
-        XSLFTextRun r = title.addNewTextParagraph().addNewTextRun();
-        r.setText("Baeldung");
+            // setting the tile
+            title = slide2.getPlaceholder(0);
+            title.clearText();
+            XSLFTextRun r = title.addNewTextParagraph().addNewTextRun();
+            r.setText("Baeldung");
 
-        // Adding the link
-        XSLFHyperlink link = r.createHyperlink();
-        link.setAddress("http://www.baeldung.com");
+            // Adding the link
+            XSLFHyperlink link = r.createHyperlink();
+            link.setAddress("http://www.baeldung.com");
 
-        // setting the content
-        XSLFTextShape content = slide2.getPlaceholder(1);
-        content.clearText(); // unset any existing text
-        content.addNewTextParagraph().addNewTextRun().setText("First paragraph");
-        content.addNewTextParagraph().addNewTextRun().setText("Second paragraph");
-        content.addNewTextParagraph().addNewTextRun().setText("Third paragraph");
+            // setting the content
+            XSLFTextShape content = slide2.getPlaceholder(1);
+            content.clearText(); // unset any existing text
+            content.addNewTextParagraph().addNewTextRun().setText("First paragraph");
+            content.addNewTextParagraph().addNewTextRun().setText("Second paragraph");
+            content.addNewTextParagraph().addNewTextRun().setText("Third paragraph");
 
-        // Creating 3rd slide - List
-        layout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
-        XSLFSlide slide3 = ppt.createSlide(layout);
-        title = slide3.getPlaceholder(0);
-        title.clearText();
-        r = title.addNewTextParagraph().addNewTextRun();
-        r.setText("Lists");
+            // Creating 3rd slide - List
+            layout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
+            XSLFSlide slide3 = ppt.createSlide(layout);
+            title = slide3.getPlaceholder(0);
+            title.clearText();
+            r = title.addNewTextParagraph().addNewTextRun();
+            r.setText("Lists");
 
-        content = slide3.getPlaceholder(1);
-        content.clearText();
-        XSLFTextParagraph p1 = content.addNewTextParagraph();
-        p1.setIndentLevel(0);
-        p1.setBullet(true);
-        r1 = p1.addNewTextRun();
-        r1.setText("Bullet");
+            content = slide3.getPlaceholder(1);
+            content.clearText();
+            XSLFTextParagraph p1 = content.addNewTextParagraph();
+            p1.setIndentLevel(0);
+            p1.setBullet(true);
+            r1 = p1.addNewTextRun();
+            r1.setText("Bullet");
 
-        // the next three paragraphs form an auto-numbered list
-        XSLFTextParagraph p2 = content.addNewTextParagraph();
-        p2.setBulletAutoNumber(AutoNumberingScheme.alphaLcParenRight, 1);
-        p2.setIndentLevel(1);
-        XSLFTextRun r2 = p2.addNewTextRun();
-        r2.setText("Numbered List Item - 1");
+            // the next three paragraphs form an auto-numbered list
+            XSLFTextParagraph p2 = content.addNewTextParagraph();
+            p2.setBulletAutoNumber(AutoNumberingScheme.alphaLcParenRight, 1);
+            p2.setIndentLevel(1);
+            XSLFTextRun r2 = p2.addNewTextRun();
+            r2.setText("Numbered List Item - 1");
 
-        // Creating 4th slide
-        XSLFSlide slide4 = ppt.createSlide();
-        createTable(slide4);
+            // Creating 4th slide
+            XSLFSlide slide4 = ppt.createSlide();
+            createTable(slide4);
 
-        // Save presentation
-        FileOutputStream out = new FileOutputStream(fileLocation);
-        ppt.write(out);
-        out.close();
+            // Save presentation
+            FileOutputStream out = new FileOutputStream(fileLocation);
+            ppt.write(out);
+            out.close();
 
-        // Closing presentation
-        ppt.close();
+            // Closing presentation
+            ppt.close();
+        }
+
     }
 
     /**
